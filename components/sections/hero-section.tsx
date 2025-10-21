@@ -37,16 +37,23 @@ export default function HeroSection() {
             Discover cutting-edge laptops, desktops, network devices, and audio equipment. Your trusted partner for all
             technology needs.
           </p>
-          <button
-            className={`bg-primary hover:bg-accent text-primary-foreground px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover-lift ${
+          <div
+            className={`${
               isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-            style={{
-              transitionDelay: isLoaded ? "0.4s" : "0s",
-            }}
+            } flex items-center gap-3 transition-all duration-300`}
+            style={{ transitionDelay: isLoaded ? "0.4s" : "0s" }}
           >
-            Shop Now
-          </button>
+            <button
+              className="bg-primary hover:bg-accent text-primary-foreground px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover-lift"
+            >
+              Shop Now
+            </button>
+            <button
+              className="bg-white text-primary-background px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover-lift border border-white/80"
+            >
+              Learn More
+            </button>
+          </div>
         </div>
       </div>
 
