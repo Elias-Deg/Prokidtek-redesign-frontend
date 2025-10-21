@@ -250,13 +250,19 @@ export const getReviews = async (): Promise<Review[]> => {
 
 export const getProductReviews = async (productId: string): Promise<Review[]> => {
   try {
-    const q = query(reviewsCollection, where('productId', '==', productId), orderBy('createdAt', 'desc'))
+    // First get all reviews, then filter and sort in memory (temporary solution)
+    const q = query(reviewsCollection)
     const snapshot = await getDocs(q)
-    return snapshot.docs.map(doc => ({
+    const allReviews = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
       createdAt: doc.data().createdAt?.toDate() || new Date(),
     })) as Review[]
+    
+    // Filter by productId and sort by createdAt
+    return allReviews
+      .filter(review => review.productId === productId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   } catch (error) {
     console.error('Error fetching product reviews:', error)
     return []
