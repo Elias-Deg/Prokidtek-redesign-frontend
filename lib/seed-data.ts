@@ -1,5 +1,5 @@
-import { Product, NewArrival, BestSelling, Testimonial } from './types'
-import { addProduct, addNewArrival, addBestSelling, addTestimonial } from './firebase-services'
+import { Product, NewArrival, BestSelling, Testimonial, Review } from './types'
+import { addProduct, addNewArrival, addBestSelling, addTestimonial, addReview } from './firebase-services'
 
 export const seedProducts = async (): Promise<void> => {
   const products: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>[] = [
@@ -181,6 +181,177 @@ export const seedTestimonials = async (): Promise<void> => {
   }
 }
 
+export const seedReviews = async (): Promise<void> => {
+  const reviews: Omit<Review, 'id' | 'createdAt'>[] = [
+    // ProBook Elite 15 reviews
+    {
+      productId: "1",
+      author: "Sarah Johnson",
+      rating: 5,
+      comment: "Absolutely love this laptop! The performance is outstanding and the build quality is premium. Perfect for my work needs.",
+      verified: true,
+    },
+    {
+      productId: "1",
+      author: "Michael Chen",
+      rating: 4,
+      comment: "Great laptop overall. Battery life could be better, but the speed and display quality make up for it.",
+      verified: true,
+    },
+    {
+      productId: "1",
+      author: "Emily Rodriguez",
+      rating: 5,
+      comment: "Best laptop I've ever owned. The keyboard is comfortable and the screen is crystal clear. Highly recommended!",
+      verified: true,
+    },
+    {
+      productId: "1",
+      author: "David Kim",
+      rating: 4,
+      comment: "Solid performance and reliable. The only downside is the price, but you get what you pay for.",
+      verified: true,
+    },
+    
+    // UltraBook Pro reviews
+    {
+      productId: "2",
+      author: "Alex Thompson",
+      rating: 5,
+      comment: "Incredible thin design with desktop-level performance. Perfect for professionals who need power on the go.",
+      verified: true,
+    },
+    {
+      productId: "2",
+      author: "Lisa Wang",
+      rating: 5,
+      comment: "The UltraBook Pro exceeded my expectations. Lightning fast and incredibly portable. Worth every penny!",
+      verified: true,
+    },
+    {
+      productId: "2",
+      author: "James Wilson",
+      rating: 4,
+      comment: "Excellent laptop with top-tier specs. The only minor issue is the fan noise under heavy load.",
+      verified: true,
+    },
+    
+    // WorkStation X1 reviews
+    {
+      productId: "3",
+      author: "Maria Garcia",
+      rating: 5,
+      comment: "This workstation is a beast! Handles 4K video editing like a dream. Perfect for creative professionals.",
+      verified: true,
+    },
+    {
+      productId: "3",
+      author: "Robert Taylor",
+      rating: 4,
+      comment: "Powerful machine for demanding tasks. The build quality is excellent and it runs cool even under load.",
+      verified: true,
+    },
+    {
+      productId: "3",
+      author: "Jennifer Lee",
+      rating: 5,
+      comment: "Outstanding performance for 3D rendering and video production. This workstation has transformed my workflow.",
+      verified: true,
+    },
+    
+    // Desktop Pro Max reviews
+    {
+      productId: "4",
+      author: "Kevin Brown",
+      rating: 4,
+      comment: "Great gaming desktop with solid performance. The RGB lighting looks amazing and the cooling is excellent.",
+      verified: true,
+    },
+    {
+      productId: "4",
+      author: "Amanda Davis",
+      rating: 5,
+      comment: "Perfect for both work and gaming. Fast, reliable, and well-built. Highly satisfied with this purchase.",
+      verified: true,
+    },
+    
+    // Enterprise Router 5G reviews
+    {
+      productId: "5",
+      author: "Tom Anderson",
+      rating: 5,
+      comment: "Blazing fast 5G connectivity! This router has transformed our office network. Setup was easy and reliable.",
+      verified: true,
+    },
+    {
+      productId: "5",
+      author: "Rachel Green",
+      rating: 4,
+      comment: "Excellent router with great range and speed. The 5G support is impressive and the WiFi 6E is future-proof.",
+      verified: true,
+    },
+    
+    // Network Switch Pro reviews
+    {
+      productId: "6",
+      author: "Mark Johnson",
+      rating: 4,
+      comment: "Enterprise-grade switch that handles our network traffic perfectly. PoE support is a great feature.",
+      verified: true,
+    },
+    {
+      productId: "6",
+      author: "Susan Miller",
+      rating: 5,
+      comment: "Reliable and fast network switch. The 48 ports give us plenty of room to grow. Highly recommended.",
+      verified: true,
+    },
+    
+    // Studio Monitor Speakers reviews
+    {
+      productId: "7",
+      author: "John Smith",
+      rating: 5,
+      comment: "Studio-quality sound reproduction. These monitors are perfect for mixing and mastering. Crystal clear audio.",
+      verified: true,
+    },
+    {
+      productId: "7",
+      author: "Patricia White",
+      rating: 4,
+      comment: "Excellent studio monitors with accurate sound. The XLR inputs are a nice touch for professional setups.",
+      verified: true,
+    },
+    
+    // Wireless Headphones Pro reviews
+    {
+      productId: "8",
+      author: "Daniel Clark",
+      rating: 5,
+      comment: "Best wireless headphones I've ever used! The noise cancellation is incredible and battery life is amazing.",
+      verified: true,
+    },
+    {
+      productId: "8",
+      author: "Michelle Adams",
+      rating: 5,
+      comment: "Premium sound quality with excellent comfort. The 40-hour battery life is perfect for long flights.",
+      verified: true,
+    },
+    {
+      productId: "8",
+      author: "Christopher Moore",
+      rating: 4,
+      comment: "Great headphones with top-notch noise cancellation. The Bluetooth 5.3 connection is rock solid.",
+      verified: true,
+    },
+  ]
+
+  for (const review of reviews) {
+    await addReview(review)
+  }
+}
+
 export const seedAllData = async (): Promise<void> => {
   console.log('Starting data seeding...')
   
@@ -196,6 +367,9 @@ export const seedAllData = async (): Promise<void> => {
     
     await seedTestimonials()
     console.log('✅ Testimonials seeded successfully')
+    
+    await seedReviews()
+    console.log('✅ Reviews seeded successfully')
     
     console.log('🎉 All data seeded successfully!')
   } catch (error) {

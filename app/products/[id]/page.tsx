@@ -3,9 +3,10 @@
 import { useState, useEffect, use } from "react"
 import Navigation from "@/components/navigation"
 import Footer from "@/components/footer"
-import { ChevronLeft, ChevronRight, Star } from "lucide-react"
+import { ChevronLeft, ChevronRight, Star, CheckCircle } from "lucide-react"
 import { useProduct } from "@/hooks/use-products"
 import { useProducts } from "@/hooks/use-products"
+import { useReviews } from "@/hooks/use-reviews"
 
 export default function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -17,6 +18,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
   const resolvedParams = use(params)
   const { product, loading: productLoading, error: productError } = useProduct(resolvedParams.id)
   const { products } = useProducts()
+  const { reviews, loading: reviewsLoading } = useReviews(resolvedParams.id)
 
   // Initialize images and specs early to avoid reference errors
   const images = product?.images || [product?.image || "/placeholder.svg"]
@@ -197,12 +199,65 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
             </div>
           </div>
 
-          {/* Reviews Section - Placeholder for future implementation */}
+          {/* Reviews Section */}
           <div className="mb-16 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
             <h2 className="text-3xl font-bold text-foreground mb-8">Customer Reviews</h2>
-            <div className="text-center py-12">
-              <p className="text-foreground/60 text-lg">Customer reviews will be displayed here once they are submitted.</p>
-            </div>
+            
+            {reviewsLoading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-foreground/60">Loading reviews...</p>
+              </div>
+            ) : reviews.length > 0 ? (
+              <div className="space-y-6">
+                {reviews.map((review, idx) => (
+                  <div
+                    key={review.id}
+                    className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
+                    style={{ animationDelay: `${300 + idx * 100}ms` }}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                          <span className="text-primary font-bold text-lg">
+                            {review.author.charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-semibold text-foreground">{review.author}</h4>
+                            {review.verified && (
+                              <CheckCircle className="w-4 h-4 text-green-500" />
+                            )}
+                          </div>
+                          <p className="text-sm text-foreground/60">
+                            {review.createdAt.toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${
+                              i < review.rating ? "fill-primary text-primary" : "text-foreground/30"
+                            }`}
+                          />
+                        ))}
+                        <span className="ml-2 text-sm font-semibold text-foreground">
+                          {review.rating}/5
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-foreground/80 leading-relaxed">{review.comment}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-foreground/60 text-lg">No reviews yet. Be the first to review this product!</p>
+              </div>
+            )}
           </div>
 
           <div
