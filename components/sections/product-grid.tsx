@@ -3,15 +3,27 @@
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useProducts } from "@/hooks/use-products"
+import { Bookmark } from "lucide-react"
 
 export default function ProductGrid() {
   const [activeCategory, setActiveCategory] = useState("all")
   const [isVisible, setIsVisible] = useState(false)
+  const [likedProducts, setLikedProducts] = useState<string[]>([])
   const { products, loading, error } = useProducts()
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
+
+  const toggleLike = (productId: string, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setLikedProducts(prev => 
+      prev.includes(productId) 
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    )
+  }
 
   const filteredProducts = activeCategory === "all" ? products : products.filter((p) => p.category === activeCategory)
 
@@ -69,6 +81,20 @@ export default function ProductGrid() {
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
+                  
+                  {/* Bookmark Icon */}
+                  <button
+                    onClick={(e) => toggleLike(product.id, e)}
+                    className="absolute top-3 right-3 p-2 rounded-full bg-black/20 hover:bg-black/40 transition-all duration-300"
+                  >
+                    <Bookmark 
+                      className={`w-5 h-5 ${
+                        likedProducts.includes(product.id) 
+                          ? "fill-blue-500 text-blue-500" 
+                          : "text-white"
+                      }`} 
+                    />
+                  </button>
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                   <p className="text-xs text-primary font-semibold mb-1 uppercase tracking-wide">{product.category}</p>
