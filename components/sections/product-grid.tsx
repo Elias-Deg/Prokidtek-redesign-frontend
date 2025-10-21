@@ -90,7 +90,7 @@ export default function ProductGrid() {
                     <Bookmark 
                       className={`w-5 h-5 ${
                         likedProducts.includes(product.id) 
-                          ? "fill-blue-500 text-blue-500" 
+                          ? "fill-orange-500 text-orange-500" 
                           : "text-white"
                       }`} 
                     />
